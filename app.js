@@ -27,7 +27,38 @@ var formidable = require('formidable'); // form 태그 데이터들을 가져오
 
 var fs = require('fs-extra'); // 파일을 복사하거나 디렉토리 복사하는 모듈
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(countVisitors);
 
+function countVisitors(req, res, next) {
+    if(!req.cookies.count&&req.cookies['connect.sid']) {
+        res.cookie('count', "", {maxAge : 3600000, httpOnly: true});
+        var now = new Date();
+        var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
+        if(date != req.cookies.countDate) {
+            res.cookie('countDate', date, {maxAge: 86400000, httpOnly: true});
+
+            var Counter = require('./models/Counter');
+            Counter.findOne({name:"vistors"}, function(err, counter) {
+                if(err) return next();
+                if(counter==null) {
+                    Counter.create({name:"vistors", totalCount:1, todayCount:1, date:date});
+                } else {
+                    counter.totalCount++;
+                    if(counter.date == date) {
+                        counter.todayCount++;
+                    }else {
+                        counter.todayCount = 1;
+                        counter.date = date;
+                    }
+                    counter.save();
+                }
+            });
+        }
+    }
+    return next();
+}
 
 
 app.use(express.static(__dirname + '/public')); //public 폴더 안에 javascript 파일과 css파일을 모아둘 예정
@@ -110,7 +141,7 @@ db.images.insert({"name":name,"filePath":filePath},function(err,doc){
 
   });
 
-    res.redirect("/main"); // http://localhost:3000/ 으로 이동!
+    res.redirect("/write"); // http://localhost:3000/ 으로 이동!
 
 });
 
@@ -168,7 +199,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static("public"));
 app.use('/', index);
 app.use('/users', users);
 
@@ -210,6 +241,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // routes
 const indexRoute      = require("./routes/index");
+const { futimes } = require('fs');
 
 let url =  "mongodb://localhost/mydb";
 mongoose.connect(url, {useNewUrlParser: true});

@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="Genie">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,6 +8,8 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.1.1">
     <title>Kick the Bucket</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="controller/controller.js"></script>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/carousel/">
 
@@ -51,21 +53,135 @@
       float: right;
       }
 
+  body::-webkit-scrollbar {
+    width: 10px;
+  }
+  body::-webkit-scrollbar-thumb {
+    background-color: #253b69bd;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  body::-webkit-scrollbar-track {
+    background-color: rgba(39, 36, 43, 0.295);
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
+
+  .nav-up {
+
+top: -50px;
+
+transition:0.2s;
+
+}
+
+#img {
+  height: 100%;
+  width: 100%;
+  background-image: url(images/home4.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mainimg {
+  font-size: 29px;
+  position: absolute;
+  display: block;
+}
+
+.mainimg > span {
+  display: block;
+  color: white;
+  text-align: left;
+  width: 200px;
+  height: 33px;
+  animation: textanimate 1s linear forwards;
+}
+
+.mainimg > span:before {
+  display: block;
+  width: 200px;
+  height: 33px;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: animate 1s linear forwards;
+}
+
+.mainimg > span:after {
+  display: block;
+  content: "";
+  width: 100px;
+  height: 33px;
+  position :absolute;
+  top: 0;
+  left: 170px;
+
+  animation: animate 1s linear forwards;
+  animation-delay: 1s;
+}
+
+@keyframes animate {
+    0% {
+        width: 0;
+        height: 33px;
+        border-bottom: 2px solid white;
+    }
+    100% {
+        width: 100%;
+        height: 33px;
+        border-bottom: 2px solid white;
+    }
+}
+
+@keyframes textanimate {
+    0% {
+        transform: translateX(-170px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+}
+
+.firstBtn:focus {
+  border: none;
+  outline: none;
+}
+
+.button {
+  display:block; width:200px;
+  height:40px; line-height:40px;
+  border:0px #3399dd solid;
+  margin:15px auto;
+  background-color:#66aaff;
+  text-align:center;
+  cursor: pointer;
+  color:#333;
+  transition:all 0.9s, color 0.3;
+  border-radius: 10px;
+  }
+.button:hover {color:#fff;}
+.hover1:hover { box-shadow:200px 0 0 0 rgba(0,0,0,0.5) inset; }
+
     </style>
     <!-- Custom styles for this template -->
+    <!-- Bady background style="background-image: url(images/home8.jpg);  background-size: contain; background-position: center;"-->
   </head>
-  <body>
+  <body ng-controller="helloants" >
     <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+  <nav id="navbar" class="navbar navbar-expand-md navbar-dark fixed-top bg-primary nav-up">
     <a class="navbar-brand" href="#" style="font-family: cursive;">KicktheBucket!</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/mypage">마이페이지</a>
-        </li>
       </ul>
      
     </div>
@@ -78,12 +194,24 @@
     </div>
     
   </nav>
-</header>
+
 
 <div style="text-align: center;">
-<img src='https://i.dlpng.com/static/png/7181287_preview.png'  width="30%" style="z-index: -1;">
-<p style="z-index: 1; font-size:x-large; font-family: 'Yeon Sung', cursive; margin-top: -50px; margin-bottom: 100px;">당신의 버킷 리스트는 무엇인가요?</p>
+  <img src="images/home10.jpg" style="width: 100%;">
+<div class="mainimg" data="bucket">
+<span style="z-index: 1; margin-top: -100px;">&nbsp;Bucket List</span>
 </div>
+</div>
+</header>
+
+<div style="height : 50px;" >
+  <% if (board !== null) { %>
+    <div>
+      <button style="float: right;" class="firstBtn button hover1">현재 <%= board.length %> 개 도전 중!!</button>
+    </div>
+  <% } %>
+</div>
+
 
 <main role="main">
 <!--  <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -134,67 +262,67 @@
     </a>
   </div> -->
 
-
-
-    <div class="row" style="margin: 50px 0 0 0";>
-      <% if (board !== null){
-        for(var i = 0; i < board.length; i++) { %>
-          
-            <div class="col-lg-4" style="text-align: center;">
-              <br><br>
-              <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
-                <rect width="100%" height="100%" fill="#0000ff"/>
-                <text x="50%" y="50%" fill="white" dy=".3em"><%=board[i].author%></text>
-              </svg>
-              <br><br>
-              <a type="button" class="btn btn-secondary" href="/board/<%= board[i]._id%>" style="background-color:rgb(0, 146, 146); border: 0; outline: 0;"><h5>자세히  &raquo;</h5></a>
-            </div>
-         
-      <%  }} %>
+ <hr>
+  <div class="row" style="margin: 50px 0 0 0;">
+    <div  ng-repeat="image in imageList" class="col-lg-3" style="text-align: center ;padding: 10px;">
+      <img ng-src="{{image.filePath}}" width="300" height="300" focusable="false" >
     </div>
+  </div>
+ <hr>
+  <div class="row" style="text-align: center;">
+    <% if (board !== null){
+      for(var i = 0; i < board.length; i++) { %>
+        <div class="col-sm-0" style="text-align: center; margin: 0 0 10px 0;">
+            <a type="button" class="btn btn-secondary" href="/board/<%= board[i]._id%>" style="background-color:rgb(0, 146, 146); border: 0; outline: 0;">
+              <h6><%= i+1 %> &raquo </h6></a>
+        </div>
+        &nbsp;
+       
+    <%  }} %>
+  </div>
+
+
       
     
 
   <div class="container marketing">
 
-    
 
     <!-- START THE FEATURETTES -->
 
     <hr class="featurette-divider">
 
     <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      <div class="col-md-7" style="background-color: rgba(190, 70, 140, 0.100);">
+        <h2 class="featurette-heading">Don't try to procrastinate. <span class="text-muted">Do it first.</span></h2>
+        <p class="lead">What is your life bucket list? For you who live without a goal, KicktheBucket! is your guide to life, Get everyone's attention with your bucket list.</p>
       </div>
       <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+        <img src="images/home_foot_5.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>What is your Bucketlist?</title>
       </div>
     </div>
 
     <hr class="featurette-divider">
 
     <div class="row featurette">
-      <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      <div class="col-md-7 order-md-2" style="background-color: rgba(1, 65, 155, 0.1);">
+        <h2 class="featurette-heading">Happiness is not far away. <span class="text-muted">Look around.</span></h2>
+        <p class="lead">What is your happiness? It is Spongebob town. If you're SpongeBob neighborhood, wouldn't you have to go there at least once? This is not difficult. Add it to your bucket list and do it now.</p>
       </div>
       <div class="col-md-5 order-md-1">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+        <img src="images/home_foot_3.gif" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>What is your Bucketlist?</title>
       </div>
     </div>
 
     <hr class="featurette-divider">
 
     <div class="row featurette">
-      <div class="col-md-7">
+      <div class="col-md-7" style="background-color: rgba(190, 70, 140, 0.100);">
         <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        <p class="lead">Do you need a long word? Leave right now! kickthebuucket is your guide to life.</p>
       </div>
       <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+        <img src="images/home_foot_4.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>What is your Bucketlist?</title>
       </div>
     </div>
 
@@ -206,11 +334,44 @@
 
 
   <!-- FOOTER -->
-  <footer class="container">
-    <p class="float-right"><a href="#">Back to top</a></p>
+  <footer>
+    <button class="button hover1 firstBtn float-right" onclick = "location.href = '#'">Back to top !</button>
   </footer>
 </main>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script></body>
+      <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+      <script>
+        var didScroll;
+        var lastScrollTop = 0;
+        var delta = 5;
+        var navbarHeight = $('#navbar').outerHeight();
+        $(window).scroll(function(event){
+            didScroll = true;
+        });
+        
+        setInterval(function() {
+            if (didScroll) {
+                hasScrolled();
+                didScroll = false;
+            }
+        }, 250);
+
+        function hasScrolled() {
+            var st = $(this).scrollTop();
+            if(Math.abs(lastScrollTop - st) <= delta)
+                return;
+        
+            if (st > lastScrollTop && st > navbarHeight){
+                $('#navbar').removeClass('nav-down').addClass('nav-up');
+            } else {
+                if(st + $(window).height() < $(document).height()) {
+                    $('#navbar').removeClass('nav-up').addClass('nav-down');
+                }
+            }
+            lastScrollTop = st;
+        }
+        </script>
+
+    </body>
 </html>
 
